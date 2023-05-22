@@ -3,7 +3,9 @@ package hello.jdbc22.repository;
 import hello.jdbc22.connection.DBConnectionUtil;
 import hello.jdbc22.domain.Member;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.support.JdbcUtils;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.NoSuchElementException;
 
@@ -11,7 +13,13 @@ import java.util.NoSuchElementException;
  * JDBC - DriverManger 사용
  */
 @Slf4j
-public class MemberRepositoryVO {
+public class MemberRepositoryV1 {
+
+    private final DataSource dataSource;
+
+    public MemberRepositoryV1(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public Member save(Member member) throws SQLException {
         String sql = "insert into member(member_id, money) values(?, ?)";
@@ -104,32 +112,15 @@ public class MemberRepositoryVO {
 
     private static void close(Connection con, Statement stmt, ResultSet rs) throws SQLException {
 
-        if (rs != null) {
-            try {
-                rs.close();
-            } catch (SQLException e) {
-                log.info("error", e);
-            }
-        }
+        JdbcUtils.closeResultSet(rs);
+        JdbcUtils.closeStatement(stmt);
+        JdbcUtils.closeConnection(con);
 
-        if (stmt != null) {
-            try {
-                stmt.close();
-            } catch (SQLException e) {
-                log.info("error", e);
-            }
-        }
-
-        if (con != null) {
-            try {
-                con.close();
-            } catch (SQLException e) {
-                log.info("error", e);
-            }
-        }
     }
 
-    private static Connection getConnection() {
-        return DBConnectionUtil.getConnection();
+    private Connection getConnection() throws SQLException {
+        Connection con = dataSource.getConnection();
+        log.info("get connection={}, class={}", con, con.getClass());
+        return con;
     }
 }
