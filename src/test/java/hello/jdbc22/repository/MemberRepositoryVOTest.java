@@ -2,19 +2,17 @@ package hello.jdbc22.repository;
 
 import hello.jdbc22.domain.Member;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 class MemberRepositoryVOTest {
 
-    MemberRepositoryVO repository = new MemberRepositoryVO();
+    MemberRepositoryV0 repository = new MemberRepositoryV0();
 
     @Test
     void crud() throws SQLException {
