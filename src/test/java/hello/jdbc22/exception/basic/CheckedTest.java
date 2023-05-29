@@ -1,7 +1,10 @@
 package hello.jdbc22.exception.basic;
 
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
 public class CheckedTest {
@@ -14,7 +17,10 @@ public class CheckedTest {
 
     @Test
     void checked_throw() {
-        System.out.println("CheckedTest.checked_throw");
+        Service service = new Service();
+
+        assertThatThrownBy(() -> service.callThrow())
+                .isInstanceOf(MyCheckedException.class);
     }
 
 
